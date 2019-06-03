@@ -86,7 +86,7 @@ int main(int argc, char* argv[]){
 		// if the object file is valid, send http response
 		if(valid){
 			// write status lines, "Content-Length" header and an empty line into header_buf
-'/tmp/evince-3414/image.TLPN2Z.png' 			ret = snprintf(header_buf, BUFFER_SIZE - 1, "%s %s\r\n", "HTTP/1.1", status_line[0]);
+			ret = snprintf(header_buf, BUFFER_SIZE - 1, "%s %s\r\n", "HTTP/1.1", status_line[0]);
 			len += ret;
 			
 			ret = snprintf(header_buf + len, BUFFER_SIZE - 1 - len, "Content-Length: %d\r\n", file_stat.st_size);

@@ -1,3 +1,5 @@
 # Linux-learning
+## Code learning of "Linux High Performance Server Programming"
 
-This repo is for recaping Linux knowledge learning before and marking down the path of learning new knowledge of Linux.
+I try to rewrite all code instances with annotations while reading this fantastic book.
+

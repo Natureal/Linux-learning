@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <string.h>
 
+// 超时连接函数
 int timeout_connect(const char* ip, int port, int time) {
 	int ret = 0;
 	struct sockaddr_in address;
@@ -25,12 +26,14 @@ int timeout_connect(const char* ip, int port, int time) {
 	timeout.tv_sec = time;
 	timeout.tv_usec = 0;
 	socklen_t = len = sizeof(timeout);
+	// 设置sockfd的超时属性
 	ret = setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, &timeout, len);
 	assert(ret != -1);
 	
 	ret = connfd(sockfd, (struct sockaddr*)&address, sizeof(address));
 	if (ret == -1) {
 		if (errno == EINPROGRESS) {
+			// 说明超时，处理超时任务
 			printf("connecting timeout, process timeout logic \n");
 			return -1;
 		}

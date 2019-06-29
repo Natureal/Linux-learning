@@ -7,6 +7,8 @@
 #include <pthread.h>
 #include "locker.h"
 
+// 半同步/半反应堆形式
+
 // 线程池类
 template<typename T>
 class threadpool{
@@ -94,6 +96,7 @@ void *threadpool<T>::worker(void *arg){
 
 template<typename T>
 void threadpool<T>::run(){
+	// 线程循环（阻塞）等待工作队列来任务
 	while(!m_stop){
 		m_queuestat.wait(); // 等待任务处理的信号
 		m_queuelocker.lock(); // 锁住工作队列

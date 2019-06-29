@@ -15,7 +15,7 @@
 #include <sys/socket.h>
 // 包含socketaddr_in,htons的定义
 #include <netinet/in.h>
-// 包含htons(),htonl(),inet_pton()的定义
+// 包含htons(),htonl(),inet_pton(),struct linger的定义
 #include <arpa/inet.h>
 // 包含assert宏
 #include <assert.h>
@@ -128,7 +128,7 @@ private:
 	int m_read_idx;
 	// 当前正在分析的字符在缓冲区的位置
 	int m_checked_idx;
-	// 当前正在解析的行的起始位置
+	// 需要被解析的行的起始位置
 	int m_start_line;
 	// 写缓冲区
 	char m_write_buf[WRITE_BUFFER_SIZE];

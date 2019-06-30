@@ -87,7 +87,8 @@ int main(int argc, char *argv[]){
 
 	addfd(epollfd, listenfd, false);
 	http_conn::m_epollfd = epollfd;
-
+	
+	// epoll I/O 多路复用
 	while(true){
 		int number = epoll_wait(epollfd, events, MAX_EVENT_NUMBER, -1);
 		if((number < 0) && (errno != EINTR)){
@@ -99,6 +100,7 @@ int main(int argc, char *argv[]){
 			int sockfd = events[i].data.fd;
 			if(sockfd == listenfd){
 				struct sockaddr_in client_address;
+				bzero(&client_address, sizeof(client_address));
 				socklen_t client_addrlength = sizeof(client_address);
 				int connfd = accept(listenfd, (struct sockaddr*)&client_address,
 										&client_addrlength);

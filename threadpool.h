@@ -59,7 +59,7 @@ threadpool<T>::threadpool(int thread_number, int max_requests):
 		// 将所有进程都标记为脱离模式
 		if(pthread_detach(m_threads[i])){
 			delete[] m_threads;
-			throw std:;exception();
+			throw std::exception();
 		}
 	}
 }
@@ -73,7 +73,7 @@ threadpool<T>::~threadpool(){
 
 // 往请求队列里添加任务
 template<typename T>
-threadpool<T>::append(T *requests){
+bool threadpool<T>::append(T *request){
 	// 操作工作队列时一定要加锁，因为它被所有线程共享
 	m_queuelocker.lock();
 	if(m_workqueue.size() > m_max_requests){

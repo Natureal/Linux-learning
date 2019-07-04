@@ -35,6 +35,8 @@
 #include <stdarg.h>
 // 定义了通过错误码来回报错误信息的宏
 #include <errno.h>
+// writev
+#include <sys/uio.h>
 // 自定义的锁
 #include "locker.h"
 
@@ -61,10 +63,11 @@ enum METHOD{ GET=0, POST, HEAD, PUT, DELETE, TRACE,
 // 解析客户请求时，主状态机所处的状态
 enum CHECK_STATE{ CHECK_STATE_REQUESTLINE = 0,
 				  CHECK_STATE_HEADER,
-				  CHECK_STATE_CONNECT };
+				  CHECK_STATE_CONTENT };
 
-// 行的读取状态
-enum LINE_STATUS{ LINE_OK = 0, LINE_BAD, LINE_OPEN };
+// 处理HTTP请求的可能结果
+enum HTTP_CODE{ NO_REQUEST, GET_REQUEST, BAD_REQUEST, NO_RESOURCE,
+				FORBIDDEN_REQUEST, FILE_REQUEST, INTERNAL_ERROR, CLOSED_CONNECTION};
 
 // 行的读取状态
 enum LINE_STATUS{ LINE_OK = 0, LINE_BAD, LINE_OPEN };
@@ -145,7 +148,7 @@ private:
 	// 客户请求的目标文件的文件名
 	char *m_url;
 	// HTTP协议版本号，这里仅支持HTTP/1.1
-	char *version;
+	char *m_version;
 	// 主机名
 	char *m_host;
 	// HTTP请求的消息体长度

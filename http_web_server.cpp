@@ -13,6 +13,7 @@
 #include "locker.h"
 #include "threadpool.h"
 #include "http_conn.h"
+//#include "http_conn.cpp"
 
 #define MAX_FD 65536
 #define MAX_EVENT_NUMBER 10000
@@ -65,7 +66,7 @@ int main(int argc, char *argv[]){
 	int listenfd = socket(PF_INET, SOCK_STREAM, 0);
 	assert(listenfd >= 0);
 	struct linger tmp = {1, 0};
-	setsocketopt(listenfd, SOL_SOCKET, SO_LINGER, &tmp, sizeof(tmp));
+	setsockopt(listenfd, SOL_SOCKET, SO_LINGER, &tmp, sizeof(tmp));
 
 	int ret = 0;
 	struct sockaddr_in address;
@@ -81,7 +82,7 @@ int main(int argc, char *argv[]){
 	ret = listen(listenfd, 5);
 	assert(ret >= 0);
 
-	epoll_event events[MAX_EVNET_NUMBER];
+	epoll_event events[MAX_EVENT_NUMBER];
 	int epollfd = epoll_create(5);
 	assert(epollfd != -1);
 
@@ -113,7 +114,7 @@ int main(int argc, char *argv[]){
 					continue;
 				}
 				// 初始化客户连接
-				user[connfd].init(connfd, client_address);
+				users[connfd].init(connfd, client_address);
 			}
 			else if(events[i].events & (EPOLLRDHUP || EPOLLHUP || EPOLLERR)){
 				// 如果有异常，直接关闭客户连接

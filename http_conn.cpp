@@ -47,7 +47,7 @@ void modfd(int epollfd, int fd, int ev){
 int http_conn::m_user_count = 0;
 int http_conn::m_epollfd = -1;
 
-void http_conn::close_conn(bool read_close = true){
+void http_conn::close_conn(bool read_close){
 	if(read_close && (m_sockfd != -1)){
 		removefd(m_epollfd, m_sockfd);
 		m_sockfd = -1;
@@ -82,7 +82,7 @@ void http_conn::init(){
 	m_write_idx = 0;
 	memset(m_read_buf, '\0', READ_BUFFER_SIZE);
 	memset(m_write_buf, '\0', WRITE_BUFFER_SIZE);
-	memset(m_read_file, '\0', FILENAME_LEN);
+	memset(m_real_file, '\0', FILENAME_LEN);
 }
 
 // 从状态机
@@ -166,7 +166,7 @@ http_conn::HTTP_CODE http_conn::parse_request_line(char *text){
 		return BAD_REQUEST;
 	}
 	if(strncasecmp(m_url, "http://", 7) == 0){
-		m_url += 7；
+		m_url += 7;
 		m_url = strchr(m_url, '/');
 	}
 
@@ -219,6 +219,15 @@ http_conn::HTTP_CODE http_conn::parse_headers(char *text){
 	}
 	
 	// 未完成
+	return NO_REQUEST;
+}
+
+// 这里并没有真正解析HTTP请求的消息体，只是判断其是否被完整地读入了
+http_conn::HTTP_CODE http_conn::parse_content(char *text){
+	if(m_read_idx >= (m_content_length + m_checked_idx)){
+		text[m_content_length] = '\0';
+		return GET_REQUEST;
+	}
 	return NO_REQUEST;
 }
 
@@ -368,7 +377,7 @@ bool http_conn::add_status_line(int status, const char *title){
 }
 
 bool http_conn::add_headers(int content_len){
-	add_content_length(content_length);
+	add_content_length(content_len);
 	add_linger();
 	add_blank_line();
 }

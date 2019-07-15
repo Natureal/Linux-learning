@@ -116,7 +116,7 @@ int main(int argc, char *argv[]){
 				// 初始化客户连接
 				users[connfd].init(connfd, client_address);
 			}
-			else if(events[i].events & (EPOLLRDHUP || EPOLLHUP || EPOLLERR)){
+			else if(events[i].events & (EPOLLRDHUP | EPOLLHUP | EPOLLERR)){
 				// 如果有异常，直接关闭客户连接
 				// EPOLLRDHUP：TCP连接对方至少关闭写端
 				// EPOLLHUP：对应的fd被挂断

@@ -1,3 +1,6 @@
+/*
+This code implements the command "ls" in Linux
+*/
 #include <stdio.h>
 #include <dirent.h>
 #include <stdlib.h>

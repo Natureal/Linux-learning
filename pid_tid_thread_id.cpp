@@ -1,3 +1,10 @@
+/*
+This code is aiming at distinguishing pthread id, pid and tid
+Conclusion:
+(1) In the perspective of Linux core: getpid(), syscall(SYS_gettid)) are system calls, they return true pid/tid.
+(2) In the perspective of a process:  pthread_self() returns thread id (pthread_t) within a process, provided by the library pthread.
+
+*/
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>

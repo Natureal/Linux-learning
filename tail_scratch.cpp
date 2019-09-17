@@ -1,8 +1,10 @@
+/*
+This code implements the command "tail" in Linux shell
+
+*/
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
-
-// 实现了 Linux shell 中 tail 的功能，支持 -n 参数
 
 int parse_opt(int argc, char *argv[]){
 	const char *optstr = "n:";
